@@ -35,13 +35,13 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
     link = ET.SubElement(channel, "link")
     link.text = feed_link
 
-    atom_link = ET.SubElement(channel, "atom:link", {"href": "https://api.puskar.net/podcasts/eara/indes.xml", "rel": "self", "type": "application/rss+xml"})
+    atom_link = ET.SubElement(channel, "atom:link", {"href": "https://api.puskar.net/podcasts/eara/indes.xml", "rel": "https://api.puskar.net/podcasts/eara/indes.xml", "type": "application/rss+xml"})
 
     # iTunes-specific elements
     itunes_author = ET.SubElement(channel, "itunes:author")
     itunes_author.text = "Cecilia and Helen"
 
-    itunes_category = ET.SubElement(channel, "itunes:category", {"text": "Music Commentary"})
+    itunes_category = ET.SubElement(channel, "itunes:category", {"text": "Music"})
 
     itunes_image = ET.SubElement(channel, "itunes:image", {"href": "https://api.puskar.net/podcasts/"+ os.path.basename(args.directory_to_scan) +"/image.jpg"})
 
