@@ -39,7 +39,7 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
 
     itunes_category = ET.SubElement(channel, "itunes:category", {"text": "Music"})
 
-    itunes_image = ET.SubElement(channel, "itunes:image", {"href": "http://api.puskar.net/podcasts/"+ os.path.basename(args.directory_to_scan) +"/image.jpg"})
+    itunes_image = ET.SubElement(channel, "itunes:image", {"href": "https://api.puskar.net/podcasts/"+ os.path.basename(args.directory_to_scan) +"/image.jpg"})
 
     itunes_explicit = ET.SubElement(channel, "itunes:explicit")
     itunes_explicit.text = "no"
@@ -66,7 +66,7 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
         item_description.text = description.text + time.strftime(" %B %d, %Y ", time.gmtime(os.path.getmtime(mp3_file)))
 
         item_link = ET.SubElement(item, "link")
-        item_link.text = "http://api.puskar.net/podcasts/" + os.path.dirname(os.path.relpath(mp3_file, args.podcast_root))
+        item_link.text = "https://api.puskar.net/podcasts/" + os.path.dirname(os.path.relpath(mp3_file, args.podcast_root))
 
         item_pubDate = ET.SubElement(item, "pubDate")
         item_pubDate.text = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime(os.path.getmtime(mp3_file)))
@@ -85,7 +85,7 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
         itunes_summary.text = "Podcast episode: " + os.path.basename(mp3_file)
 
         enclosure = ET.SubElement(item, "enclosure", {
-            "url": "http://api.puskar.net/podcasts/" + os.path.relpath(mp3_file, args.podcast_root),
+            "url": "https://api.puskar.net/podcasts/" + os.path.relpath(mp3_file, args.podcast_root),
             "length": str(os.path.getsize(mp3_file)),
             "type": "audio/mpeg"
         })
@@ -104,5 +104,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     mp3_files = scan_directory_for_mp3_files(args.podcast_root+"/"+args.directory_to_scan)
-    create_podcast_feed(mp3_files, args.feed_title, args.feed_description, "http://api.puskar.net/podcasts/", args.output_file)
+    create_podcast_feed(mp3_files, args.feed_title, args.feed_description, "https://api.puskar.net/podcasts/", args.output_file)
     print(f"Podcast feed generated: {args.output_file}")
