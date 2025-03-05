@@ -35,7 +35,7 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
     link = ET.SubElement(channel, "link")
     link.text = feed_link
 
-    atom_link = ET.SubElement(channel, "atom:link", {"href": "https://api.puskar.net/podcasts/eara/indes.xml", "rel": "https://api.puskar.net/podcasts/eara/indes.xml", "type": "application/rss+xml"})
+    atom_link = ET.SubElement(channel, "atom:link", {"href": "https://api.puskar.net/podcasts/eara/index.xml", "rel": "https://api.puskar.net/podcasts/eara/index.xml", "type": "application/rss+xml"})
 
     # iTunes-specific elements
     itunes_author = ET.SubElement(channel, "itunes:author")
