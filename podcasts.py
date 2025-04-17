@@ -2,6 +2,7 @@ import os
 import time
 import xml.etree.ElementTree as ET
 import argparse
+import uuid
 
 def scan_directory_for_mp3_files(directory):
     mp3_files = []
@@ -27,7 +28,7 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
     title.text = feed_title
 
     language = ET.SubElement(channel, "language")
-    language.text = "en-us"
+    language.text = "en"
 
     description = ET.SubElement(channel, "description")
     description.text = feed_description
@@ -46,7 +47,7 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
     itunes_image = ET.SubElement(channel, "itunes:image", {"href": "https://api.puskar.net/podcasts/"+ os.path.basename(args.directory_to_scan) +"/image.jpg"})
 
     itunes_explicit = ET.SubElement(channel, "itunes:explicit")
-    itunes_explicit.text = "true"
+    itunes_explicit.text = "false"
 
     itunes_owner = ET.SubElement(channel, "itunes:owner")
     itunes_owner_name = ET.SubElement(itunes_owner, "itunes:name")
@@ -79,7 +80,10 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
 
         # iTunes-specific elements for each item
         itunes_duration = ET.SubElement(item, "itunes:duration")
-        itunes_duration.text = "00:00:00"  # Replace with actual duration
+        itunes_duration.text = "01:10:00"  # Replace with actual duration
+
+        itunes_guid = ET.SubElement(item, "guid", {"isPermaLink": "false"})
+        itunes_guid.text = str(uuid.uuid5(uuid.NAMESPACE_URL, mp3_file))
 
         itunes_episode = ET.SubElement(item, "itunes:episode")
         itunes_episode.text = str(index)
@@ -97,7 +101,7 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
         })
 
     tree = ET.ElementTree(rss)
-    tree.write(output_file, encoding="utf-8", xml_declaration=True)
+    tree.write(output_file, encoding='UTF-8', xml_declaration=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate a podcast feed from MP3 files.")
