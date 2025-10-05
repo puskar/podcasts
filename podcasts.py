@@ -36,11 +36,11 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
     link = ET.SubElement(channel, "link")
     link.text = feed_link
 
-    atom_link = ET.SubElement(channel, "atom:link", {"href": "https://api.puskar.net/podcasts/eara/index.xml", "rel": "https://api.puskar.net/podcasts/eara/index.xml", "type": "application/rss+xml"})
+    atom_link = ET.SubElement(channel, "atom:link", {"href": "https://api.puskar.net/podcasts/"+args.directory_to_scan+"/index.xml", "rel": "https://api.puskar.net/podcasts/"+args.directory_to_scan+"/index.xml", "type": "application/rss+xml"})
 
     # iTunes-specific elements
     itunes_author = ET.SubElement(channel, "itunes:author")
-    itunes_author.text = "Cecilia and Helen"
+    itunes_author.text = "Helen and Guests"
 
     itunes_category = ET.SubElement(channel, "itunes:category", {"text": "Music"})
 
@@ -51,12 +51,12 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
 
     itunes_owner = ET.SubElement(channel, "itunes:owner")
     itunes_owner_name = ET.SubElement(itunes_owner, "itunes:name")
-    itunes_owner_name.text = "Helen and Cecilia"
+    itunes_owner_name.text = "Helen and Guests"
     itunes_owner_email = ET.SubElement(itunes_owner, "itunes:email")
     itunes_owner_email.text = "hpuskar@oberlin.edu"
 
     itunes_subtitle = ET.SubElement(channel, "itunes:subtitle")
-    itunes_subtitle.text = "Helen and Cecilia's Radio Show"
+    itunes_subtitle.text = "Helen and Guests Radio Show"
 
     itunes_summary = ET.SubElement(channel, "itunes:summary")
     itunes_summary.text = feed_description
