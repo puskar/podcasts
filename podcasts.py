@@ -70,7 +70,7 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
         item_description = ET.SubElement(item, "description")
         item_description.text = description.text + time.strftime(" %B %d, %Y ", time.gmtime(os.path.getmtime(mp3_file)))
 
-        item_xunes_image = ET.SubElement(item, "itunes:image", {"href": "https://api.puskar.net/podcasts/"+ os.path.basename(args.directory_to_scan) +"/image.jpg"})
+        item_itunes_image = ET.SubElement(item, "itunes:image", {"href": "https://api.puskar.net/podcasts/"+ os.path.basename(args.directory_to_scan) +"/image.jpg"})
 
         item_link = ET.SubElement(item, "link")
         item_link.text = "https://api.puskar.net/podcasts/" + os.path.dirname(os.path.relpath(mp3_file, args.podcast_root))
