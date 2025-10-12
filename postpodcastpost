@@ -1,3 +1,4 @@
+#!/bin/bash
 set -x
 
 SHOW=wikimarmot
@@ -9,10 +10,10 @@ DIR=$SHOW/$(date +%Y-%m-%d)
 FILE=$SHOW-$(date +%Y-%m-%d_%H-%M-%S).mp3
 DESC='Wikimarmot - the Podcast. This is the podcast version of "https://en.wikipedia.org/wiki/alpine_marmot". The show airs Wednesday at 6:00 am'
 
-mkdir -p /home/puskar/$PODDIR/$DIR
+mkdir -p /home/puskar/$PODDIR/"$DIR"
 #curl -s --max-time 4200 -o /home/puskar/$PODDIR/$DIR/$FILE 'http://wobc.stream/main?O=&I=&P=17&InfoID=3&SeasonID=&BCID=&ShowID=&B=Listen+Live'
-curl -s --max-time 4200 -o /home/puskar/$PODDIR/$DIR/$FILE 'http://wobc.stream/main?O=&I=&P=1&InfoID=3'
-cd /home/puskar
-python ./podcasts.py ${PODDIR} ${SHOW} ${TC} "${DESC}" "./${PODDIR}/${SHOW}/testindex.xml"
+curl -s --max-time 4200 -o /home/puskar/$PODDIR/"$DIR"/"$FILE" 'http://wobc.stream/main?O=&I=&P=1&InfoID=3'
+cd /home/puskar || exit
+python ./podcasts.py ${PODDIR} ${SHOW} "${TC}" "${DESC}" "./${PODDIR}/${SHOW}/testindex.xml"
 
-eyeD3 -2 --title "${FULLSHOW}" --artist "${ARTIST}" --album "${FULLSHOW}" --album-artist "${ARTIST}" --track 1 --track-total 1 --genre podcast --add-image "${PODDIR}/${SHOW}/image.jpg":ICON --release-date $(date +%Y-%m-%d) "/home/puskar/${PODDIR}/${DIR}/${FILE}"
+eyeD3 -2 --title "${FULLSHOW}" --artist "${ARTIST}" --album "${FULLSHOW}" --album-artist "${ARTIST}" --track 1 --track-total 1 --genre podcast --add-image "${PODDIR}/${SHOW}/image.jpg":ICON --release-date "$(date +%Y-%m-%d)" "/home/puskar/${PODDIR}/${DIR}/${FILE}"
