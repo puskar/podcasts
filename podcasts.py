@@ -15,6 +15,7 @@ def scan_directory_for_mp3_files(directory):
     return mp3_files
 
 def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, output_file):
+    
     rss = ET.Element("rss", {
         "xmlns:atom":"http://www.w3.org/2005/Atom",
         "xmlns:content": "http://purl.org/rss/1.0/modules/content/",
@@ -28,21 +29,29 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
     title.text = feed_title
 
     language = ET.SubElement(channel, "language")
-    language.text = "en"
+    language.text = "en-us"
 
     description = ET.SubElement(channel, "description")
     description.text = feed_description
 
     link = ET.SubElement(channel, "link")
     link.text = feed_link
-
-    atom_link = ET.SubElement(channel, "atom:link", {"href": "https://api.puskar.net/podcasts/"+args.directory_to_scan+"/index.xml", "rel": "https://api.puskar.net/podcasts/"+args.directory_to_scan+"/index.xml", "type": "application/rss+xml"})
+    
+    #PSP1 compliance
+    podcast_locked = ET.SubElement(channel, "podcast:locked")
+    podcast_locked.text = "no"
+    
+    podcast_guid = ET.SubElement(channel, "podcast:guid")
+    podcast_guid.text = str(uuid.uuid5(uuid.NAMESPACE_URL, feed_title)) 
+    
+    atom_link = ET.SubElement(channel, "atom:link", {"href": "https://api.puskar.net/podcasts/"+args.directory_to_scan+"/index.xml", "rel": "self", "type": "application/rss+xml"})
 
     # iTunes-specific elements
     itunes_author = ET.SubElement(channel, "itunes:author")
     itunes_author.text = "Helen and Guests"
 
     itunes_category = ET.SubElement(channel, "itunes:category", {"text": "Music"})
+    itune_subcategory = ET.SubElement(itunes_category, "itunes:category", {"text": "Music Commentary"})
 
     itunes_image = ET.SubElement(channel, "itunes:image", {"href": "https://api.puskar.net/podcasts/"+ os.path.basename(args.directory_to_scan) +"/image.jpg"})
 
@@ -55,6 +64,9 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
     itunes_owner_email = ET.SubElement(itunes_owner, "itunes:email")
     itunes_owner_email.text = "hpuskar@oberlin.edu"
 
+    itunes_title = ET.SubElement(channel, "itunes:title")
+    itunes_title.text = feed_title
+
     itunes_subtitle = ET.SubElement(channel, "itunes:subtitle")
     itunes_subtitle.text = "Helen and Guests Radio Show"
 
@@ -65,12 +77,12 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
         item = ET.SubElement(channel, "item")
 
         item_title = ET.SubElement(item, "title")
-        item_title.text = description.text + time.strftime(" %B %d, %Y ", time.gmtime(os.path.getmtime(mp3_file)))
+        item_title.text = feed_title + time.strftime(" %B %d, %Y ", time.gmtime(os.path.getmtime(mp3_file)))
 
         item_description = ET.SubElement(item, "description")
         item_description.text = description.text + time.strftime(" %B %d, %Y ", time.gmtime(os.path.getmtime(mp3_file)))
 
-        item_itunes_image = ET.SubElement(item, "itunes:image", {"href": "https://api.puskar.net/podcasts/"+ os.path.basename(args.directory_to_scan) +"/image.jpg"})
+        item_xunes_image = ET.SubElement(item, "itunes:image", {"href": "https://api.puskar.net/podcasts/"+ os.path.basename(args.directory_to_scan) +"/image.jpg"})
 
         item_link = ET.SubElement(item, "link")
         item_link.text = "https://api.puskar.net/podcasts/" + os.path.dirname(os.path.relpath(mp3_file, args.podcast_root))
@@ -89,7 +101,7 @@ def create_podcast_feed(mp3_files, feed_title, feed_description, feed_link, outp
         itunes_episode.text = str(index)
 
         itunes_explicit = ET.SubElement(item, "itunes:explicit")
-        itunes_explicit.text = "true"
+        itunes_explicit.text = "false"
 
         itunes_summary = ET.SubElement(item, "itunes:summary")
         itunes_summary.text = "Podcast episode: " + os.path.basename(mp3_file)
